@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Presentasi: Alat Bantu Perancangan DFD & UML</title>
+  <!-- Font Awesome CDN for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      background-color: #f9f9f9;
+      color: #2c3e50;
+      overflow: hidden;
+    }
+    .presentation {
+      height: 100vh;
+      width: 100vw;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      background: linear-gradient(135deg, #000000, #000000);
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    .slide {
+      position: absolute;
+      opacity: 0;
+      background: white;
+      border-radius: 16px;
+      padding: 40px 50px;
+      box-shadow: 0 6px 30px rgba(0, 0, 0, 0.3);
+      max-width: 850px;
+      width: 100%;
+      height: 80vh;
+      overflow-y: auto;
+      transition: opacity 0.5s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      justify-content: center;
+      gap: 20px;
+    }
+    .slide.active {
+      opacity: 1;
+      z-index: 10;
+    }
+    h1 {
+      font-size: 3.4rem;
+      font-weight: 900;
+      margin: 0;
+      color: #0d1a42;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      justify-content: center;
+    }
+    h1 i {
+      color: #3498db;
+      font-size: 3.8rem;
+    }
+    h2 {
+      font-size: 2.4rem;
+      font-weight: 700;
+      margin: 0.4em 0 0.6em;
+      color: #144a78;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+    h2 i {
+      color: #2980b9;
+      font-size: 2.6rem;
+    }
+    h3 {
+      font-size: 1.8rem;
+      font-weight: 600;
+      margin-top: 1em;
+      margin-bottom: 0.5em;
+      color: #1a355f;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    h3 i {
+      color: #2176c7;
+      font-size: 1.8rem;
+    }
+    p, li {
+      font-size: 1.25rem;
+      line-height: 1.6;
+      max-width: 720px;
+      color: #34495e;
+    }
+    ul {
+      list-style: none;
+      padding-left: 0;
+      margin: 1em 0 1.5em;
+      max-width: 720px;
+    }
+    ul li {
+      position: relative;
+      padding-left: 2.5em;
+      margin-bottom: 0.9em;
+      text-align: left;
+      color: #34495e;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    ul li::before {
+      content: "";
+      position: absolute;
+      left: 0.8em;
+      top: 0.9em;
+      width: 12px;
+      height: 12px;
+      background-color: #3498db;
+      border-radius: 50%;
+    }
+    /* Add icons in list items */
+    ul.members li::before {
+      content: "\f007"; /* Font Awesome user icon */
+      font-family: "Font Awesome 6 Free";
+      font-weight: 900;
+      color: #3498db;
+      position: static;
+      margin-left: -2.5em;
+      margin-right: 0.8em;
+      background: none;
+      border-radius: 0;
+      font-size: 1.2rem;
+      top: auto;
+    }
+    ul.dfd li::before {
+      content: "\f1c0"; /* Font Awesome database icon */
+      font-family: "Font Awesome 6 Free";
+      font-weight: 900;
+      color: #2980b9;
+      position: static;
+      margin-left: -2.5em;
+      margin-right: 0.8em;
+      background: none;
+      border-radius: 0;
+      font-size: 1.2rem;
+      top: auto;
+    }
+    ul.uml-structural li::before {
+      content: "\f0e8"; /* Font Awesome project diagram icon */
+      font-family: "Font Awesome 6 Free";
+      font-weight: 900;
+      color: #2c3e50;
+      position: static;
+      margin-left: -2.5em;
+      margin-right: 0.8em;
+      background: none;
+      border-radius: 0;
+      font-size: 1.2rem;
+    }
+    ul.uml-behavior li::before {
+      content: "\f2db"; /* Font Awesome tasks icon */
+      font-family: "Font Awesome 6 Free";
+      font-weight: 900;
+      color: #2980b9;
+      position: static;
+      margin-left: -2.5em;
+      margin-right: 0.8em;
+      background: none;
+      border-radius: 0;
+      font-size: 1.1rem;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1em;
+      font-size: 1.2rem;
+      max-width: 720px;
+      text-align: center;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 12px 16px;
+    }
+    th {
+      background-color: #ecf0f1;
+      color: #2c3e50;
+      font-weight: 700;
+    }
+    img {
+      max-width: 60%;
+      height: auto;
+      margin-top: 16px;
+      border: 2px solid #ccc;
+      padding: 8px;
+      background-color: #fff;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .nav-buttons {
+      position: absolute;
+      bottom: 3px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 24px;
+      z-index: 20;
+    }
+    button {
+      padding: 14px 28px;
+      font-size: 10px;
+      border: none;
+      border-radius: 8px;
+      background-color: #3498db;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      box-shadow: 0 2px 8px rgba(52, 152, 219, 0.6);
+      font-weight: 700;
+    }
+    button:hover, button:focus {
+      background-color: #2980b9;
+      outline: none;
+      box-shadow: 0 0 12px 4px #2980b9;
+    }
+    /* Scrollbar style for slide overflow */
+    .slide::-webkit-scrollbar {
+      width: 10px;
+    }
+    .slide::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 8px;
+    }
+    .slide::-webkit-scrollbar-thumb {
+      background-color: #3498db;
+      border-radius: 8px;
+      border: 2px solid #f1f1f1;
+    }
+  </style>
+</head>
+<body>
+  <div class="presentation" tabindex="0" aria-label="Presentation slides">
+    <section class="slide" aria-hidden="true" role="group" aria-roledescription="slide" aria-label="Slide 1">
+      <h1><i class="fa-solid fa-brain"></i> Presentasi: Alat Bantu Perancangan DFD & UML</h1>
+    </section>
+
+    <section class="slide" aria-hidden="true" role="group" aria-roledescription="slide" aria-label="Slide 2">
+      <h3><i class="fa-solid fa-user-group"></i> Daftar Anggota:</h3>
+      <ul class="members">
+        <li>1. Syalwa Dafa Lathifa 2301100051</li>
+        <li>2. Novinta Gisca Aldi Hapsari 2301100013</li>
+        <li>3. Bayu Patrio 2301100037</li>
+        <li>4. Mutiara Ningsih 21100099</li>
+        <li>5. Muhajir Salim 2301100072</li>
+      </ul>
+    </section>
+    <section class="slide" aria-hidden="true" role="group" aria-roledescription="slide" aria-label="Slide 3">
+      <h2><i class="fa-solid fa-sitemap"></i> Data Flow Diagram (DFD)</h2>
+      <p>DFD adalah diagram yang menggambarkan aliran data dari sebuah proses atau sistem informasi.</p>
+      <ul class="dfd">
+        <li><strong>Diagram Konteks</strong>: Gambaran umum sistem secara keseluruhan.</li>
+        <li><strong>DFD Level 0</strong>: Menunjukkan proses utama dalam sistem.</li>
+        <li><strong>DFD Level 1, 2, dst.</strong>: Menampilkan rincian lebih lanjut dari proses-proses tersebut.</li>
+      </ul>
+      </section>
+    <section class="slide" aria-hidden="true" role="group" aria-roledescription="slide" aria-label="Slide 3">
+      <h2><strong>Simbol-simbol DFD:</strong></h2>
+      <ul class="dfd">
+        <li><strong>Proses</strong>: Menunjukkan transformasi data.</li>
+        <li><strong>Aliran Data</strong>: Menunjukkan pergerakan data antar elemen.</li>
+        <li><strong>Penyimpanan Data</strong>: Menunjukkan tempat penyimpanan data.</li>
+        <li><strong>Entitas Eksternal</strong>: Menunjukkan sumber atau tujuan data di luar sistem.</li>
+      </ul>
+      <img src="Contoh DFD.jpg" alt="Contoh Data Flow Diagram" />
+    </section>
+
+    <section class="slide" aria-hidden="true" role="group" aria-roledescription="slide" aria-label="Slide 4">
+      <h2><i class="fa-solid fa-diagram-project"></i> Unified Modeling Language (UML)</h2>
+      <p>UML adalah bahasa pemodelan standar yang digunakan untuk menggambarkan sistem perangkat lunak berbasis objek.</p>
+      <p><strong>Kategori Diagram UML:</strong></p>
+      <ul>
+        <li><strong>Diagram Struktural</strong>: Menggambarkan struktur statis sistem.</li>
+        <li><strong>Diagram Perilaku</strong>: Menggambarkan perilaku dinamis sistem.</li>
+      </ul>
+    </section>
+
+    <section class="slide" aria-hidden="true" role="group" aria-roledescription="slide" aria-label="Slide 5">
+      <h3><i class="fa-solid fa-diagram-project"></i> Diagram Struktural UML</h3>
+      <ul class="uml-structural">
+        <li><strong>Class Diagram</strong>: Menunjukkan kelas-kelas dalam sistem dan hubungan antar kelas.</li>
+        <li><strong>Object Diagram</strong>: Menunjukkan instansi dari kelas pada suatu waktu tertentu.</li>
+        <li><strong>Component Diagram</strong>: Menunjukkan komponen perangkat lunak dan hubungan antar komponen.</li>
+        <li><strong>Deployment Diagram</strong>: Menunjukkan distribusi perangkat lunak pada perangkat keras.</li>
+        <li><strong>Package Diagram</strong>: Menunjukkan pengelompokan elemen-elemen model.</li>
+        <li><strong>Composite Structure Diagram</strong>: Menunjukkan struktur internal dari kelas dan kolaborasinya.</li>
+        <li><strong>Profile Diagram</strong>: Menunjukkan ekstensi dari UML untuk domain tertentu.</li>
+      </ul>
+    </section>
+
+    <section class="slide" aria-hidden="true" role="group" aria-roledescription="slide" aria-label="Slide 6">
+      <h3><i class="fa-solid fa-tasks"></i> Diagram Perilaku UML</h3>
+      <ul class="uml-behavior">
+        <li><strong>Use Case Diagram</strong>: Menunjukkan interaksi antara aktor dan sistem.</li>
+        <li><strong>Activity Diagram</strong>: Menunjukkan alur kerja atau aktivitas dalam sistem.</li>
+        <li><strong>State Machine Diagram</strong>: Menunjukkan perubahan status objek dalam sistem.</li>
+        <li><strong>Sequence Diagram</strong>: Menunjukkan interaksi objek berdasarkan waktu.</li>
+        <li><strong>Communication Diagram</strong>: Menunjukkan interaksi antar objek dan pesan yang dikirimkan.</li>
+        <li><strong>Interaction Overview Diagram</strong>: Menunjukkan alur interaksi dalam sistem.</li>
+        <li><strong>Timing Diagram</strong>: Menunjukkan perubahan status objek berdasarkan waktu.</li>
+      </ul>
+    </section>
+
+    <section class="slide" aria-hidden="true" role="group" aria-roledescription="slide" aria-label="Slide 7">
+      <h2><i class="fa-solid fa-diagram-project"></i> Macam-macam Diagram UML</h2>
+      <h3><i class="fa-regular fa-circle-check"></i> 1. Use Case Diagram</h3>
+      <p>Use Case Diagram menggambarkan interaksi antara aktor dan sistem. Contoh:</p>
+      <img src="usecase_diagram.png" alt="Contoh Use Case Diagram" />
+    </section>
+    <section class="slide" aria-hidden="true" role="group" aria-roledescription="slide" aria-label="Slide 7">
+      <h3><i class="fa-regular fa-circle-check"></i> 2. Class Diagram</h3>
+      <p>Class Diagram menunjukkan struktur kelas dalam sistem. Contoh:</p>
+      <img src="class_diagram.png" alt="Contoh Class Diagram" />
+    </section>
+    <section class="slide" aria-hidden="true" role="group" aria-roledescription="slide" aria-label="Slide 7">
+      <h3><i class="fa-regular fa-circle-check"></i> 4. Activity Diagram</h3>
+      <p>Activity Diagram menunjukkan alur kerja atau aktivitas dalam sistem. Contoh:</p>
+      <img src="activ_peminjam_kembali+panjang.png" alt="Contoh Activity Diagram" />
+    </section>
+
+    <section class="slide" aria-hidden="true" role="group" aria-roledescription="slide" aria-label="Slide 8">
+      <h2><i class="fa-solid fa-align-justify"></i> Perbandingan DFD dan UML</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Aspek</th>
+            <th>DFD</th>
+            <th>UML</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Pendekatan</td>
+            <td>Berbasis aliran data</td>
+            <td>Berbasis objek</td>
+          </tr>
+          <tr>
+            <td>Fokus</td>
+            <td>Alur data dan proses</td>
+            <td>Struktur dan perilaku sistem</td>
+          </tr>
+          <tr>
+            <td>Kegunaan</td>
+            <td>Analisis sistem informasi</td>
+            <td>Perancangan sistem perangkat lunak</td>
+          </tr>
+          <tr>
+            <td>Diagram</td>
+            <td>Diagram konteks, DFD Level 0, 1, dst.</td>
+            <td>14 jenis diagram struktural dan perilaku</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+    <section class="slide" aria-hidden="true" role="group" aria-roledescription="slide" aria-label="Slide 1">
+      <h1> Studi Kasus: Sistem Informasi Pendaftaran Ekstrakurikuler Sekolah
+</h1>
+    </section>
+    <section class="slide" aria-hidden="true" role="group" aria-roledescription="slide" aria-label="Slide 9">
+      <h2> Deskripsi Studi Kasus
+</h2>
+      <p>SMA Harapan Bangsa memiliki banyak kegiatan ekstrakurikuler seperti Pramuka, Basket, dan Musik. Selama ini, proses pendaftaran ekstrakurikuler masih dilakukan secara manual, yaitu dengan mengisi formulir kertas yang kemudian dikumpulkan ke bagian kesiswaan. Data peserta sering tercecer, sulit direkap, dan tidak ada notifikasi jika kuota sudah penuh. Sekolah ingin membangun sistem informasi berbasis web agar proses pendaftaran lebih mudah, data peserta tersimpan rapi, dan admin bisa memantau kuota setiap ekstrakurikuler secara real-time.
+</p>
+    </section>
+    <section class="slide" aria-hidden="true" role="group" aria-roledescription="slide" aria-label="Slide 9">
+      <h2>Analisis Masalah</h2>
+      <ul>
+        <li>Proses manual membuat data sering hilang atau tertukar.</li>
+        <li>Pengecekan kuota harus dilakukan secara manual, sehingga sering terjadi kelebihan peserta.</li>
+        <li>Rekap data peserta memakan waktu lama dan rawan kesalahan.</li>
+        <li>Tidak ada notifikasi kepada siswa jika pendaftaran berhasil atau gagal.</li>
+      </ul>
+    </section>
+    <section class="slide" aria-hidden="true" role="group" aria-roledescription="slide" aria-label="Slide 9">
+      <h2>Solusi yang Ditawarkan</h2>
+      <ul>
+        <li>Sistem informasi pendaftaran ekstrakurikuler berbasis web.</li>
+        <li>Siswa dapat melihat daftar ekstrakurikuler, kuota, dan melakukan pendaftaran secara online.</li>
+        <li>Admin dapat mengelola data ekstrakurikuler dan peserta, serta memantau kuota secara otomatis.</li>
+        <li>Sistem memberikan notifikasi kepada siswa setelah pendaftaran.</li>
+      </ul>
+    </section>
+    <section class="slide" aria-hidden="true" role="group" aria-roledescription="slide" aria-label="Slide 7">
+      <h2>Pemodelan UML</h2>
+      <h3><i class="fa-regular fa-circle-check"></i> 1. Class Diagram</h3>
+      <img src="class.jpg" alt="Contoh Use Case Diagram" />
+    </section>
+    <section class="slide" aria-hidden="true" role="group" aria-roledescription="slide" aria-label="Slide 7">
+      <h2>Tabel Data Sederhana</h2>
+      <img src="table.jpg" alt="Contoh Use Case Diagram" />
+    </section>
+    <section class="slide" aria-hidden="true" role="group" aria-roledescription="slide" aria-label="Slide 9">
+      <h2>Kesimpulan</h2>
+      <p>Dengan sistem ini, proses pendaftaran ekstrakurikuler menjadi lebih cepat, data peserta lebih aman, dan admin dapat memantau kuota secara real-time. Penggunaan UML membantu memodelkan dan merancang sistem secara terstruktur dan efisien.</p>
+    </section>
+
+    <section class="slide" aria-hidden="true" role="group" aria-roledescription="slide" aria-label="Slide 9">
+      <h2><i class="fa-solid fa-lightbulb"></i> Kesimpulan</h2>
+      <ul>
+        <li>DFD dan UML adalah alat bantu penting dalam perancangan sistem.</li>
+        <li>DFD cocok untuk memodelkan alur data dalam sistem informasi.</li>
+        <li>UML cocok untuk memodelkan sistem perangkat lunak berbasis objek.</li>
+        <li>Pemilihan alat bantu tergantung pada kebutuhan dan pendekatan pengembangan sistem.</li>
+      </ul>
+    </section>
+    <section class="slide" aria-hidden="true" role="group" aria-roledescription="slide" aria-label="Slide 9">
+      <h2>Tanya Jawab</h2>
+      <p>Terima kasih atas perhatian Anda. Apakah ada pertanyaan?</p>
+    </section>
+    <section class="slide" aria-hidden="true" role="group" aria-roledescription="slide" aria-label="Slide 9">
+      <h2>Desain By : Syalwa</h2>
+    </section>
+
+    <div class="nav-buttons">
+      <button id="prevBtn" aria-label="Previous slide"><i class="fa-solid fa-arrow-left"></i> Sebelumnya</button>
+      <button id="nextBtn" aria-label="Next slide">Selanjutnya <i class="fa-solid fa-arrow-right"></i></button>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      const slides = document.querySelectorAll('.slide');
+      const total = slides.length;
+      let currentIndex = 0;
+
+      const prevBtn = document.getElementById('prevBtn');
+      const nextBtn = document.getElementById('nextBtn');
+
+      function showSlide(index) {
+        slides.forEach((slide, i) => {
+          slide.classList.toggle('active', i === index);
+          slide.setAttribute('aria-hidden', i !== index);
+        });
+        currentIndex = index;
+      }
+
+      prevBtn.addEventListener('click', () => {
+        currentIndex = (currentIndex > 0) ? currentIndex - 1 : total - 1;
+        showSlide(currentIndex);
+      });
+
+      nextBtn.addEventListener('click', () => {
+        currentIndex = (currentIndex < total - 1) ? currentIndex + 1 : 0;
+        showSlide(currentIndex);
+      });
+
+      document.querySelector('.presentation').addEventListener('keydown', (e) => {
+        if(e.key === 'ArrowLeft') {
+          e.preventDefault();
+          prevBtn.click();
+        } else if(e.key === 'ArrowRight') {
+          e.preventDefault();
+          nextBtn.click();
+        }
+      });
+
+      document.querySelector('.presentation').focus();
+
+      // Show first slide initially
+      showSlide(0);
+    })();
+  </script>
+</body>
+</html>
+
